@@ -3,7 +3,7 @@ package com.project.models;
 import java.time.LocalDateTime;
 
 public class PaymentRequest {
-    private int customerId;
+    private long customerId;
     private String merchantId;
     private String merchantPassword;
     private double amount;
@@ -25,11 +25,11 @@ public class PaymentRequest {
         this.sendingMoment = sendingMoment;
     }
 
-    public int getCustomerId() {
+    public long getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(int customerId) {
+    public void setCustomerId(long customerId) {
         this.customerId = customerId;
     }
 
