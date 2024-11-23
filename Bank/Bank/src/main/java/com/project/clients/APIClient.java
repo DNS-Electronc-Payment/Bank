@@ -21,4 +21,9 @@ public class APIClient {
         //REST poziv prema PCC-u: salje se zahtjev koji ce PCC proslijediti Bank Acquirer-u
         //odnosi se na tacku 5 u tacki 1.1: Placanje karticom
     }
+
+    public void forwardTransactionResult(TransactionResult transactionResult) {
+        //REST poziv prema PSP-u
+        //odnosi se na tacku 6 u tacki 1.1: Placanje karticom
+    }
 }

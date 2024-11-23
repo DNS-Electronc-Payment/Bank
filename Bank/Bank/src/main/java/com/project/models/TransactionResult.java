@@ -1,7 +1,11 @@
 package com.project.models;
 
+import com.project.enums.TransactionStatus;
+
+import java.util.UUID;
+
 public class TransactionResult {
-    private TransactionResult transactionResult;
+    private TransactionStatus transactionResult;
     private String acquirerOrderId;
     private String acquirerTimestamp;
     private String issuerOrderId;
@@ -10,19 +14,19 @@ public class TransactionResult {
     public TransactionResult() {
     }
 
-    public TransactionResult(TransactionResult transactionResult, String acquirerOrderId, String acquirerTimestamp, String issuerOrderId, String issuerTimestamp) {
+    public TransactionResult(TransactionStatus transactionResult, String acquirerOrderId, String acquirerTimestamp) {
         this.transactionResult = transactionResult;
         this.acquirerOrderId = acquirerOrderId;
         this.acquirerTimestamp = acquirerTimestamp;
-        this.issuerOrderId = issuerOrderId;
-        this.issuerTimestamp = issuerTimestamp;
+        this.issuerOrderId = UUID.randomUUID().toString();
+        this.issuerTimestamp = UUID.randomUUID().toString();
     }
 
-    public TransactionResult getTransactionResult() {
+    public TransactionStatus getTransactionStatus() {
         return transactionResult;
     }
 
-    public void setTransactionResult(TransactionResult transactionResult) {
+    public void setTransactionStatus(TransactionStatus transactionResult) {
         this.transactionResult = transactionResult;
     }
 

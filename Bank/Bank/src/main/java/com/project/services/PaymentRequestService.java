@@ -16,4 +16,8 @@ public class PaymentRequestService {
     public Optional<PaymentRequest> getPaymentRequest(long customerId, long merchantId) {
         return paymentRequestRepository.findByCustomerIdAndMerchantId(customerId, merchantId);
     }
+
+    public void save(PaymentRequest paymentRequest) {
+        paymentRequestRepository.save(paymentRequest);
+    }
 }

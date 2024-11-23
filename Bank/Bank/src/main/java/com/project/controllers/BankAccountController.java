@@ -3,6 +3,7 @@ package com.project.controllers;
 import com.project.models.BankAccount;
 import com.project.models.BankRequest;
 import com.project.models.PaymentRequest;
+import com.project.models.TransactionResult;
 import com.project.services.BankAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -29,5 +30,11 @@ public class BankAccountController {
     @PostMapping("/send-bank-request")
     public void sendBankRequest(@RequestBody BankRequest bankRequest) {
         bankAccountService.processBankRequest(bankRequest);
+    }
+
+    //ovu metodu gadja API Client PCC-a kada salje rezultat transakcije Bank Acquirer-u (tacka 5 u tacki 1.1: Placanje karticom)
+    @PostMapping("/send-transaction-result")
+    public void sendTransactionResult(@RequestBody TransactionResult transactionResult) {
+        bankAccountService.processTransactionResult(transactionResult);
     }
 }

@@ -11,7 +11,7 @@ import java.util.UUID;
 public class BankRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false, nullable = false)
+    @Column(name = "requestId", updatable = false, nullable = false)
     private Long requestId;
     @Column(nullable = false)
     private String acquirerOrderId;
@@ -29,11 +29,17 @@ public class BankRequest {
     private int cardCVC;
     @Column(nullable = false)
     private Date cardDueDate;
+    @Column(nullable = false)
+    private long customerId;
+    @Column(nullable = false)
+    private long paymentId;
+    @Column(nullable = false)
+    private String merchantOrderId;
 
     public BankRequest() {
     }
 
-    public BankRequest(double currentState, String cardHolderName, String cardPAN, int cardCVC, Date cardDueDate) {
+    public BankRequest(double currentState, String cardHolderName, String cardPAN, int cardCVC, Date cardDueDate, long customerId, String merchantOrderId, long paymentId) {
         this.acquirerOrderId = UUID.randomUUID().toString();
         this.acquirerTimestamp = UUID.randomUUID().toString();
         this.sendingMoment = LocalDateTime.now();
@@ -42,6 +48,33 @@ public class BankRequest {
         this.cardPAN = cardPAN;
         this.cardCVC = cardCVC;
         this.cardDueDate = cardDueDate;
+        this.customerId = customerId;
+        this.merchantOrderId = merchantOrderId;
+        this.paymentId = paymentId;
+    }
+
+    public long getPaymentId() {
+        return paymentId;
+    }
+
+    public void setPaymentId(long paymentId) {
+        this.paymentId = paymentId;
+    }
+
+    public String getMerchantOrderId() {
+        return merchantOrderId;
+    }
+
+    public void setMerchantOrderId(String merchantOrderId) {
+        this.merchantOrderId = merchantOrderId;
+    }
+
+    public long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(long customerId) {
+        this.customerId = customerId;
     }
 
     public Long getRequestId() {
