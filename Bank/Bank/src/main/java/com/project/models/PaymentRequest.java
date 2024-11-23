@@ -1,20 +1,66 @@
 package com.project.models;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name="paymentRequests")
 public class PaymentRequest {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", updatable = false, nullable = false)
+    private long id;
+    @Column(nullable = false)
     private long customerId;
+    @Column(nullable = false)
     private String merchantId;
+    @Column(nullable = false)
     private String merchantPassword;
+    @Column(nullable = false)
     private double amount;
+    @Column(nullable = false)
     private String merchantOrderId;
+    @Column(nullable = false)
     private String successUrl;
+    @Column(nullable = false)
     private String failedUrl;
+    @Column(nullable = false)
     private String errorUrl;
+    @Column(nullable = false)
     private String timestamp;
+    @Column(nullable = false)
     private LocalDateTime sendingMoment;
+    @Column(nullable = false)
+    private long paymentId;
+    @Column(nullable = false)
+    private String paymentUrl;
 
     public PaymentRequest() {
+    }
+
+    public long getPaymentId() {
+        return paymentId;
+    }
+
+    public void setPaymentId(long paymentId) {
+        this.paymentId = paymentId;
+    }
+
+    public String getPaymentUrl() {
+        return paymentUrl;
+    }
+
+    public void setPaymentUrl(String paymentUrl) {
+        this.paymentUrl = paymentUrl;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public LocalDateTime getSendingMoment() {

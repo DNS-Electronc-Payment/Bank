@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BankRequestRepository extends JpaRepository<BankRequest, Long> {
-    public void Save(BankRequest request);
 }

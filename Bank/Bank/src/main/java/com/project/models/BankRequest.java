@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Table(name="bankRequests")
@@ -32,10 +33,10 @@ public class BankRequest {
     public BankRequest() {
     }
 
-    public BankRequest(String acquirerOrderId, String acquirerTimestamp, LocalDateTime sendingMoment, double currentState, String cardHolderName, String cardPAN, int cardCVC, Date cardDueDate) {
-        this.acquirerOrderId = acquirerOrderId;
-        this.acquirerTimestamp = acquirerTimestamp;
-        this.sendingMoment = sendingMoment;
+    public BankRequest(double currentState, String cardHolderName, String cardPAN, int cardCVC, Date cardDueDate) {
+        this.acquirerOrderId = UUID.randomUUID().toString();
+        this.acquirerTimestamp = UUID.randomUUID().toString();
+        this.sendingMoment = LocalDateTime.now();
         this.currentState = currentState;
         this.cardHolderName = cardHolderName;
         this.cardPAN = cardPAN;

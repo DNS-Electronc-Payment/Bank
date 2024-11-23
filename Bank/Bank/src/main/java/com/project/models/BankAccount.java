@@ -6,13 +6,15 @@ import java.util.Date;
 
 @Entity
 @Table(name="customerAccounts")
-public class CustomerAccount {
+public class BankAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false, nullable = false)
-    private int accountId;
+    @Column(name = "accountId", updatable = false, nullable = false)
+    private long accountId;
     @Column(nullable = false)
     private long customerId;
+    @Column(nullable = false)
+    private long bankId;
     @Column(nullable = false)
     private double currentState;
     @Column(nullable = false)
@@ -24,7 +26,15 @@ public class CustomerAccount {
     @Column(nullable = false)
     private Date cardDueDate;
 
-    public CustomerAccount() {
+    public BankAccount() {
+    }
+
+    public long getBankId() {
+        return bankId;
+    }
+
+    public void setBankId(long bankId) {
+        this.bankId = bankId;
     }
 
     public void setCustomerId(long customerId) {
@@ -39,11 +49,11 @@ public class CustomerAccount {
         this.currentState = currentState;
     }
 
-    public int getAccountId() {
+    public long getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(int accountId) {
+    public void setAccountId(long accountId) {
         this.accountId = accountId;
     }
 

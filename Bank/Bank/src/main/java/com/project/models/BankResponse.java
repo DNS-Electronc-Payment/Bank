@@ -7,10 +7,10 @@ public class BankResponse {
     private String merchantOrderId;
     private String acquirerOrderId;
     private String acquirerTimestamp;
-    private String paymentId;
+    private long paymentId;
 
 
-    public BankResponse(TransactionStatus transactionStatus, String merchantOrderId, String acquirerOrderId, String acquirerTimestamp, String paymentId) {
+    public BankResponse(TransactionStatus transactionStatus, String merchantOrderId, String acquirerOrderId, String acquirerTimestamp, long paymentId) {
         this.transactionStatus = transactionStatus;
         this.merchantOrderId = merchantOrderId;
         this.acquirerOrderId = acquirerOrderId;
@@ -53,11 +53,11 @@ public class BankResponse {
         this.acquirerTimestamp = acquirerTimestamp;
     }
 
-    public String getPaymentId() {
+    public long getPaymentId() {
         return paymentId;
     }
 
-    public void setPaymentId(String paymentId) {
+    public void setPaymentId(long paymentId) {
         this.paymentId = paymentId;
     }
 }
