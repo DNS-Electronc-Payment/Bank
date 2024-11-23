@@ -1,17 +1,32 @@
 package com.project.models;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import java.util.Date;
 
+@Entity
+@Table(name="bankRequests")
 public class BankRequest {
-    private Long requestId; //pitanje da li treba?
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", updatable = false, nullable = false)
+    private Long requestId;
+    @Column(nullable = false)
     private String acquirerOrderId;
+    @Column(nullable = false)
     private String acquirerTimestamp;
+    @Column(nullable = false)
     private LocalDateTime sendingMoment;
+    @Column(nullable = false)
     private double currentState;
+    @Column(nullable = false)
     private String cardHolderName;
+    @Column(nullable = false, unique = true)
     private String cardPAN;
+    @Column(nullable = false)
     private int cardCVC;
+    @Column(nullable = false)
     private Date cardDueDate;
 
     public BankRequest() {

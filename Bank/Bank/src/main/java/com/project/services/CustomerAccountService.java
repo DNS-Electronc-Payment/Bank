@@ -3,6 +3,7 @@ package com.project.services;
 import com.project.models.BankRequest;
 import com.project.models.CustomerAccount;
 import com.project.models.PaymentRequest;
+import com.project.repositories.BankRequestRepository;
 import com.project.repositories.CustomerAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,8 @@ public class CustomerAccountService {
 
     @Autowired
     private CustomerAccountRepository customerAccountRepository;
+    @Autowired
+    private BankRequestRepository bankRequestRepository;
 
     public void processCardData(CustomerAccount customerAccount) {
         CustomerAccount account = customerAccountRepository.findByCustomerId(customerAccount.getCustomerId());

@@ -1,14 +1,27 @@
 package com.project.models;
 
+import jakarta.persistence.*;
+
 import java.util.Date;
 
+@Entity
+@Table(name="customerAccounts")
 public class CustomerAccount {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", updatable = false, nullable = false)
     private int accountId;
+    @Column(nullable = false)
     private long customerId;
+    @Column(nullable = false)
     private double currentState;
+    @Column(nullable = false)
     private String cardHolderName;
+    @Column(nullable = false, unique = true)
     private String cardPAN;
+    @Column(nullable = false)
     private int cardCVC;
+    @Column(nullable = false)
     private Date cardDueDate;
 
     public CustomerAccount() {
