@@ -12,8 +12,9 @@ public class Bank {
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
 
+    //veza onetomany , u List<> moras staviti entitet , a ne njihove ideve da bi ti uvezao
     @OneToMany(mappedBy = "bankId")
-    private List<Long> accounts;
+    private List<BankAccount> accounts;
 
     public Bank() {
     }
@@ -26,11 +27,11 @@ public class Bank {
         this.id = id;
     }
 
-    public List<Long> getAccounts() {
+    public List<BankAccount> getAccounts() {
         return accounts;
     }
 
-    public void setAccounts(List<Long> accounts) {
+    public void setAccounts(List<BankAccount> accounts) {
         this.accounts = accounts;
     }
 }

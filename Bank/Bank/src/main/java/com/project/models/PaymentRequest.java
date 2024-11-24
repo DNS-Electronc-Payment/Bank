@@ -10,7 +10,7 @@ public class PaymentRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
-    private long id;
+    private Long id;
     @Column(nullable = false)
     private long customerId;
     @Column(nullable = false)

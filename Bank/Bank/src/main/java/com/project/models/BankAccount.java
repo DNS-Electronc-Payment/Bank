@@ -10,7 +10,7 @@ public class BankAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "accountId", updatable = false, nullable = false)
-    private long accountId;
+    private Long accountId;
     @Column(nullable = false)
     private long customerId;
     @Column(nullable = false)
