@@ -1,6 +1,7 @@
 package com.project.services;
 
 import com.project.clients.APIClient;
+import com.project.dtos.BankAccountDto;
 import com.project.enums.TransactionStatus;
 import com.project.models.*;
 import com.project.repositories.BankAccountRepository;
@@ -25,8 +26,10 @@ public class BankAccountService {
         this.apiClient = apiClient;
     }
 
-    public void processCardData(BankAccount account) {
-        if(!isValidCardNumber(account.getCardPAN())) {
+    public void processCardData(BankAccountDto accountDto) {
+        BankAccount account = bankAccountRepository.findByCardDetails(accountDto.getCardHolderName(), accountDto.getCardPAN(), accountDto.getCardCVC(), accountDto.getCardDueDate());
+
+        if(!isValidCardNumber(account.getCardPAN()) || account == null) {
             return;
         }
 

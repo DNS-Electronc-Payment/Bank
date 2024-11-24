@@ -1,5 +1,6 @@
 package com.project.controllers;
 
+import com.project.dtos.BankAccountDto;
 import com.project.models.BankAccount;
 import com.project.models.BankRequest;
 import com.project.models.PaymentRequest;
@@ -16,8 +17,8 @@ public class BankAccountController {
 
     //ovu metodu gadja Bank Front (za odjeljak posvecen Acquirer-u) nakon unosenja podataka o kartici
     @PostMapping("/process-card-data")
-    public void processCardData(@RequestBody BankAccount customerAccount) {
-        bankAccountService.processCardData(customerAccount);
+    public void processCardData(@RequestBody BankAccountDto accountDto) {
+        bankAccountService.processCardData(accountDto);
     }
 
     //ovu metodu gadja API Client PSP-a u svojoj metodi: sendPaymentRequest
