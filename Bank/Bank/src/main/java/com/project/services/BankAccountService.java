@@ -41,38 +41,42 @@ public class BankAccountService {
 
         BankAccount acquirerAccount = bankAccountRepository.findByCustomerId(account.getCustomerId());
         List<PaymentRequest> paymentRequests = paymentRequestService.getPaymentRequest(acquirerAccount.getCustomerId());
-        PaymentRequest paymentRequest = paymentRequests.getFirst();
-        BankAccount issuerAccount = bankAccountRepository.findByCustomerId(paymentRequest.getMerchantId());
+        if (!paymentRequests.isEmpty()) {
+           PaymentRequest paymentRequest = paymentRequests.get(0);
+           // PaymentRequest paymentRequest = paymentRequests.getFirst();
+            BankAccount issuerAccount = bankAccountRepository.findByCustomerId(paymentRequest.getMerchantId());
 
-        if(acquirerAccount == null || issuerAccount == null || paymentRequest == null) {
-            String acquirerOrderId = UUID.randomUUID().toString();
-            String acquirerTimestamp = UUID.randomUUID().toString();
-            BankResponse bankResponse = new BankResponse(TransactionStatus.ERROR, paymentRequest.getMerchantOrderId(), acquirerOrderId, acquirerTimestamp, paymentRequest.getPaymentId());
-            apiClient.sendBankResponse(bankResponse);
-            return;
-        }
-
-        if(acquirerAccount.getBankId() == issuerAccount.getBankId()) {
-            double state = acquirerAccount.getCurrentState() - paymentRequest.getAmount();
-            if(state < 0.0) {
+            if(acquirerAccount == null || issuerAccount == null || paymentRequest == null) {
                 String acquirerOrderId = UUID.randomUUID().toString();
                 String acquirerTimestamp = UUID.randomUUID().toString();
-                BankResponse bankResponse = new BankResponse(TransactionStatus.FAIL, paymentRequest.getMerchantOrderId(), acquirerOrderId, acquirerTimestamp, paymentRequest.getPaymentId());
+                BankResponse bankResponse = new BankResponse(TransactionStatus.ERROR, paymentRequest.getMerchantOrderId(), acquirerOrderId, acquirerTimestamp, paymentRequest.getPaymentId());
                 apiClient.sendBankResponse(bankResponse);
+                return;
+            }
+
+            if(acquirerAccount.getBankId() == issuerAccount.getBankId()) {
+                double state = acquirerAccount.getCurrentState() - paymentRequest.getAmount();
+                if(state < 0.0) {
+                    String acquirerOrderId = UUID.randomUUID().toString();
+                    String acquirerTimestamp = UUID.randomUUID().toString();
+                    BankResponse bankResponse = new BankResponse(TransactionStatus.FAIL, paymentRequest.getMerchantOrderId(), acquirerOrderId, acquirerTimestamp, paymentRequest.getPaymentId());
+                    apiClient.sendBankResponse(bankResponse);
+                }
+                else {
+                    bankAccountRepository.updateCurrentState(acquirerAccount.getAccountId(), state);
+                    String acquirerOrderId = UUID.randomUUID().toString();
+                    String acquirerTimestamp = UUID.randomUUID().toString();
+                    BankResponse bankResponse = new BankResponse(TransactionStatus.SUCCESS, paymentRequest.getMerchantOrderId(), acquirerOrderId, acquirerTimestamp, paymentRequest.getPaymentId());
+                    apiClient.sendBankResponse(bankResponse);
+                }
             }
             else {
-                bankAccountRepository.updateCurrentState(acquirerAccount.getAccountId(), state);
-                String acquirerOrderId = UUID.randomUUID().toString();
-                String acquirerTimestamp = UUID.randomUUID().toString();
-                BankResponse bankResponse = new BankResponse(TransactionStatus.SUCCESS, paymentRequest.getMerchantOrderId(), acquirerOrderId, acquirerTimestamp, paymentRequest.getPaymentId());
-                apiClient.sendBankResponse(bankResponse);
+                BankRequest bankRequest = new BankRequest(acquirerAccount.getCurrentState(), acquirerAccount.getCardHolderName(), acquirerAccount.getCardPAN(), acquirerAccount.getCardCVC(), acquirerAccount.getCardDueDate(), acquirerAccount.getCustomerId(), paymentRequest.getMerchantOrderId(), paymentRequest.getPaymentId());
+                bankRequestService.save(bankRequest);
+                apiClient.sendBankRequest(bankRequest);
             }
         }
-        else {
-            BankRequest bankRequest = new BankRequest(acquirerAccount.getCurrentState(), acquirerAccount.getCardHolderName(), acquirerAccount.getCardPAN(), acquirerAccount.getCardCVC(), acquirerAccount.getCardDueDate(), acquirerAccount.getCustomerId(), paymentRequest.getMerchantOrderId(), paymentRequest.getPaymentId());
-            bankRequestService.save(bankRequest);
-            apiClient.sendBankRequest(bankRequest);
-        }
+
     }
 
     private boolean isValidCardNumber(String cardNumber) {
