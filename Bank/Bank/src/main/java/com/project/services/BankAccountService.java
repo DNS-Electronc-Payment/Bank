@@ -1,9 +1,11 @@
 package com.project.services;
 
 import com.project.clients.APIClient;
+import com.project.config.RequestPaymentUrl;
 import com.project.enums.TransactionStatus;
 import com.project.models.*;
 import com.project.repositories.BankAccountRepository;
+import org.apache.coyote.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,9 @@ public class BankAccountService {
     private BankRequestService bankRequestService;
     @Autowired
     private APIClient apiClient;
+
+    @Autowired
+    private RequestPaymentUrl requestPaymentUrl;
 
     public BankAccountService(BankAccountRepository bankAccountRepository, PaymentRequestService paymentRequestService, BankRequestService bankRequestService, APIClient apiClient) {
         this.bankAccountRepository = bankAccountRepository;
@@ -113,11 +118,17 @@ public class BankAccountService {
         if(isRequestValid) {
 
             long paymentId = Long.parseLong(UUID.randomUUID().toString());
-            String paymentUrl = UUID.randomUUID().toString();
+            String paymentUrl = "http://localhost:4201/";
 
             paymentRequest.setPaymentId(paymentId);
             paymentRequest.setPaymentUrl(paymentUrl);
             //odvedi kupca na payment url !!!
+            try {
+                requestPaymentUrl.broadcastMessage(paymentUrl);
+            } catch (Exception e) {
+                System.out.println(e);
+
+            }
 
             paymentRequestService.save(paymentRequest);
         }

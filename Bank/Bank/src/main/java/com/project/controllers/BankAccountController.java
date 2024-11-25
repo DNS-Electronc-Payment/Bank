@@ -1,5 +1,6 @@
 package com.project.controllers;
 
+import com.project.config.RequestPaymentUrl;
 import com.project.models.BankAccount;
 import com.project.models.BankRequest;
 import com.project.models.PaymentRequest;
@@ -14,6 +15,9 @@ public class BankAccountController {
 
     @Autowired
     private BankAccountService bankAccountService;
+
+    @Autowired
+    private RequestPaymentUrl paymentUrl;
 
     //ovu metodu gadja Bank Front (za odjeljak posvecen Acquirer-u) nakon unosenja podataka o kartici
     @PostMapping("/process-card-data")
@@ -38,4 +42,8 @@ public class BankAccountController {
     public void sendTransactionResult(@RequestBody TransactionResult transactionResult) {
         bankAccountService.processTransactionResult(transactionResult);
     }
+
+
+
+
 }
