@@ -7,6 +7,7 @@ import com.project.repositories.BankAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -17,11 +18,14 @@ public class BankAccountService {
     @Autowired
     private PaymentRequestService paymentRequestService;
     @Autowired
+    private BankRequestService bankRequestService;
+    @Autowired
     private APIClient apiClient;
 
-    public BankAccountService(BankAccountRepository bankAccountRepository, PaymentRequestService paymentRequestService, APIClient apiClient) {
+    public BankAccountService(BankAccountRepository bankAccountRepository, PaymentRequestService paymentRequestService, BankRequestService bankRequestService, APIClient apiClient) {
         this.bankAccountRepository = bankAccountRepository;
         this.paymentRequestService = paymentRequestService;
+        this.bankRequestService = bankRequestService;
         this.apiClient = apiClient;
     }
 
@@ -31,8 +35,9 @@ public class BankAccountService {
         }
 
         BankAccount acquirerAccount = bankAccountRepository.findByCustomerId(account.getCustomerId());
-        BankAccount issuerAccount = bankAccountRepository.findByCustomerId(account.getCustomerId());
-        PaymentRequest paymentRequest = paymentRequestService.getPaymentRequest(acquirerAccount.getCustomerId(), issuerAccount.getCustomerId()).orElse(null);
+        List<PaymentRequest> paymentRequests = paymentRequestService.getPaymentRequest(acquirerAccount.getCustomerId());
+        PaymentRequest paymentRequest = paymentRequests.getFirst();
+        BankAccount issuerAccount = bankAccountRepository.findByCustomerId(paymentRequest.getMerchantId());
 
         if(acquirerAccount == null || issuerAccount == null || paymentRequest == null) {
             String acquirerOrderId = UUID.randomUUID().toString();
@@ -60,6 +65,7 @@ public class BankAccountService {
         }
         else {
             BankRequest bankRequest = new BankRequest(acquirerAccount.getCurrentState(), acquirerAccount.getCardHolderName(), acquirerAccount.getCardPAN(), acquirerAccount.getCardCVC(), acquirerAccount.getCardDueDate(), acquirerAccount.getCustomerId(), paymentRequest.getMerchantOrderId(), paymentRequest.getPaymentId());
+            bankRequestService.save(bankRequest);
             apiClient.sendBankRequest(bankRequest);
         }
     }
@@ -101,7 +107,7 @@ public class BankAccountService {
 
     public void processPaymentRequest(PaymentRequest paymentRequest) {
         boolean isRequestValid = paymentRequest.getCustomerId() == 0 && paymentRequest.getAmount() == 0 && paymentRequest.getErrorUrl().isEmpty() && paymentRequest.getSendingMoment() == null &&
-                paymentRequest.getFailedUrl().isEmpty() && paymentRequest.getSuccessUrl().isEmpty() && paymentRequest.getMerchantId().isEmpty() &&
+                paymentRequest.getFailedUrl().isEmpty() && paymentRequest.getSuccessUrl().isEmpty() && paymentRequest.getMerchantId() == 0L &&
                 paymentRequest.getTimestamp().isEmpty() && paymentRequest.getMerchantPassword().isEmpty() && paymentRequest.getMerchantOrderId().isEmpty();
 
         if(isRequestValid) {

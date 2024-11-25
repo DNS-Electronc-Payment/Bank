@@ -14,7 +14,7 @@ public class PaymentRequest {
     @Column(nullable = false)
     private long customerId;
     @Column(nullable = false)
-    private String merchantId;
+    private long merchantId;
     @Column(nullable = false)
     private String merchantPassword;
     @Column(nullable = false)
@@ -79,11 +79,11 @@ public class PaymentRequest {
         this.customerId = customerId;
     }
 
-    public String getMerchantId() {
+    public long getMerchantId() {
         return merchantId;
     }
 
-    public void setMerchantId(String merchantId) {
+    public void setMerchantId(long merchantId) {
         this.merchantId = merchantId;
     }
 
