@@ -115,17 +115,19 @@ public class BankAccountService {
     }
 
     public void processPaymentRequest(PaymentRequest paymentRequest) {
-        boolean isRequestValid = paymentRequest.getCustomerId() == 0 && paymentRequest.getAmount() == 0 && paymentRequest.getErrorUrl().isEmpty() && paymentRequest.getSendingMoment() == null &&
-                paymentRequest.getFailedUrl().isEmpty() && paymentRequest.getSuccessUrl().isEmpty() && paymentRequest.getMerchantId() == 0L &&
+        boolean isRequestValid = paymentRequest.getCustomerId() == 0 && paymentRequest.getAmount() == 0 && paymentRequest.getErrorUrl().isEmpty() &&
+                paymentRequest.getFailedUrl().isEmpty() && paymentRequest.getSuccessUrl().isEmpty() && paymentRequest.getMerchantId() == 0 &&
                 paymentRequest.getTimestamp().isEmpty() && paymentRequest.getMerchantPassword().isEmpty() && paymentRequest.getMerchantOrderId().isEmpty();
 
-        if(isRequestValid) {
+        if(!isRequestValid) {
 
-            long paymentId = Long.parseLong(UUID.randomUUID().toString());
+            long paymentId = Long.parseLong(UUID.randomUUID().toString().split("-")[0], 16);
             String paymentUrl = "http://localhost:4201/";
 
             paymentRequest.setPaymentId(paymentId);
             paymentRequest.setPaymentUrl(paymentUrl);
+            paymentRequestService.save(paymentRequest);
+
             //odvedi kupca na payment url !!!
             try {
                 requestPaymentUrl.broadcastMessage(paymentUrl);
@@ -134,7 +136,7 @@ public class BankAccountService {
 
             }
 
-            paymentRequestService.save(paymentRequest);
+           // paymentRequestService.save(paymentRequest);
         }
     }
 

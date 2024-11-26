@@ -3,6 +3,7 @@ package com.project.models;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name="paymentRequests")
@@ -30,14 +31,13 @@ public class PaymentRequest {
     @Column(nullable = false)
     private String timestamp;
     @Column(nullable = false)
-    private LocalDateTime sendingMoment;
-    @Column(nullable = false)
     private long paymentId;
     @Column(nullable = false)
     private String paymentUrl;
 
     public PaymentRequest() {
     }
+
 
     public long getPaymentId() {
         return paymentId;
@@ -61,14 +61,6 @@ public class PaymentRequest {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public LocalDateTime getSendingMoment() {
-        return sendingMoment;
-    }
-
-    public void setSendingMoment(LocalDateTime sendingMoment) {
-        this.sendingMoment = sendingMoment;
     }
 
     public long getCustomerId() {

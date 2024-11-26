@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/bankAccount")
+@CrossOrigin("*")
 public class BankAccountController {
 
     @Autowired
@@ -28,6 +29,8 @@ public class BankAccountController {
     //ovu metodu gadja API Client PSP-a u svojoj metodi: sendPaymentRequest
     @PostMapping("/send-payment-request")
     public void sendPaymentRequest(@RequestBody PaymentRequest paymentRequest) {
+
+        System.out.println(paymentRequest);
         bankAccountService.processPaymentRequest(paymentRequest);
     }
 
@@ -42,7 +45,6 @@ public class BankAccountController {
     public void sendTransactionResult(@RequestBody TransactionResult transactionResult) {
         bankAccountService.processTransactionResult(transactionResult);
     }
-
 
 
 
