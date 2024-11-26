@@ -15,11 +15,12 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
 
-        registry.addHandler(requestPaymentUrl(), "/responses").setAllowedOrigins("*");
+
+        registry.addHandler(formSocket(), "/form").setAllowedOrigins("http://localhost:4201");
     }
 
+
+
     @Bean
-    public RequestPaymentUrl requestPaymentUrl() {
-        return new RequestPaymentUrl();
-    }
+    public FormSocket formSocket(){return new FormSocket();}
 }

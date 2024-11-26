@@ -1,11 +1,10 @@
 package com.project.services;
 
 import com.project.clients.APIClient;
-import com.project.config.RequestPaymentUrl;
+import com.project.config.FormSocket;
 import com.project.enums.TransactionStatus;
 import com.project.models.*;
 import com.project.repositories.BankAccountRepository;
-import org.apache.coyote.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +24,9 @@ public class BankAccountService {
     private APIClient apiClient;
 
     @Autowired
-    private RequestPaymentUrl requestPaymentUrl;
+    private FormSocket formSocket;
+
+
 
     public BankAccountService(BankAccountRepository bankAccountRepository, PaymentRequestService paymentRequestService, BankRequestService bankRequestService, APIClient apiClient) {
         this.bankAccountRepository = bankAccountRepository;
@@ -122,21 +123,16 @@ public class BankAccountService {
         if(!isRequestValid) {
 
             long paymentId = Long.parseLong(UUID.randomUUID().toString().split("-")[0], 16);
-            String paymentUrl = "http://localhost:4201/";
+            String paymentUrl ="http://localhost:4201/form";
 
             paymentRequest.setPaymentId(paymentId);
             paymentRequest.setPaymentUrl(paymentUrl);
-            paymentRequestService.save(paymentRequest);
 
-            //odvedi kupca na payment url !!!
-            try {
-                requestPaymentUrl.broadcastMessage(paymentUrl);
-            } catch (Exception e) {
-                System.out.println(e);
+                paymentRequestService.save(paymentRequest);
+                goToFormUrl(paymentUrl);
 
-            }
+        }else{
 
-           // paymentRequestService.save(paymentRequest);
         }
     }
 
@@ -176,5 +172,22 @@ public class BankAccountService {
             apiClient.sendTransactionResult(transactionResult);
         }
     }
+
+
+
+    public void goToFormUrl(String url){
+        try {
+            if (formSocket != null) {
+                formSocket.broadcastMessage(url);
+            } else {
+                System.out.println("WebSocket session is closed. Attempting to reconnect...");
+            }
+        } catch (Exception e) {
+            System.out.println("Error while sending message: " + e.getMessage());
+        }
+
+    }
+
+
 }
 

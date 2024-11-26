@@ -61,9 +61,6 @@ public class BankAccount {
         return customerId;
     }
 
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
-    }
 
     public String getCardHolderName() {
         return cardHolderName;
