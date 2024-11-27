@@ -35,8 +35,9 @@ public class BankAccountService {
         this.apiClient = apiClient;
     }
 
-    public void processCardData(BankAccount account) {
-        if(!isValidCardNumber(account.getCardPAN())) {
+    public void processCardData(BankAccount forwardedAccount) {
+        BankAccount account = bankAccountRepository.findByCardPAN(forwardedAccount.getCardPAN());
+        if(account == null || !isValidCardNumber(account.getCardPAN())) {
             return;
         }
 
@@ -150,7 +151,7 @@ public class BankAccountService {
                 bankRequest.getSendingMoment() == null && bankRequest.getCurrentState() == 0.0 && bankRequest.getCardHolderName().isEmpty() &&
                 bankRequest.getCardPAN().isEmpty() && bankRequest.getCardCVC() == 0 && bankRequest.getCardDueDate() == null;
 
-        if(isRequestValid) {
+        if(!isRequestValid) {
             BankAccount acquirerAccount = bankAccountRepository.findByCustomerId(bankRequest.getCustomerId());
             if(acquirerAccount == null) {
                 return;

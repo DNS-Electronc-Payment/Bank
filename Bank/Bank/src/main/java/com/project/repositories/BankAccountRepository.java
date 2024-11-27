@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BankAccountRepository extends JpaRepository<BankAccount, Long> {
     BankAccount findByCustomerId(Long customerId);
+    BankAccount findByCardPAN(String cardPAN);
 
     @Modifying
     @Transactional
